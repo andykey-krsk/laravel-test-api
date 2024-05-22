@@ -15,30 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/user', function () {
-    return  'route get user';
-});
+Route::middleware('auth_api')->group(
+	function () {
+		Route::get('/user/{user}', function (User $user) {
+			return  'route get user ' . $user;
+		});
 
-Route::get('/user/{user}', function (User $user) {
-    return  'route get user ' . $user;
-});
+		Route::put('/user/{user}/update', function (Request $request, User $user) {
 
-Route::put('/user/{user}/update', function (Request $request, User $user) {
+			$name = $request->json('name');
 
-    $name = $request->json('name');
+			$user->name = $name;
 
-    $user->name = $name;
+			$user->update();
 
-    $user->update();
-
-    return response()->json($user);
-});
-
-
+			return response()->json($user);
+		});
+	}
+);
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //    return $request->user();
 //});
-
-
-//http://laravel-test-api.test/api/user
