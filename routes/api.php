@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/user', function () {
+    return  'route get user';
 });
+
+Route::get('/user/{user}', function (User $user) {
+    return  'route get user ' . $user;
+});
+
+Route::put('/user/{user}/update', function (Request $request, User $user) {
+
+    $name = $request->json('name');
+
+    $user->name = $name;
+
+    $user->update();
+
+    return response()->json($user);
+});
+
+
+
+//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
+
+
+//http://laravel-test-api.test/api/user
